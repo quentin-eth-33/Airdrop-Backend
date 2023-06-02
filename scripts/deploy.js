@@ -5,27 +5,27 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+const { networkConfig } = require("../helper-hardhat-config");
+const { verify } = require("../utils/verify");
+
+const { deploy, log } = deployments;
+const { deployer } = await getNamedAccounts();
+const chainId = 11155111;
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const arguments = [
+    networkConfig[chainId]["vrfCoordinatorV2"],
+    networkConfig[chainId]["subscriptionId"],
+    networkConfig[chainId]["gasLane"],
+    networkConfig[chainId]["callbackGasLimit"],
+  ];
 
-  const lockedAmount = hre.ethers.utils.parseEther("0.001");
+  const Airdrop = await hre.ethers.getContractFactory("Airdrop");
+  const airdrop = await Airdrop.deploy(arguments);
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with ${ethers.utils.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  await airdrop.deployed();
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
