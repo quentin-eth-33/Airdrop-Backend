@@ -31,4 +31,9 @@ module.exports = {
       default: 0,
     },
   },
+  etherscan: {
+    apiKey: {
+      sepolia: "5DDYRKH9WW2CASRHPBR2RZ29467S31V18D",
+    },
+  },
 };

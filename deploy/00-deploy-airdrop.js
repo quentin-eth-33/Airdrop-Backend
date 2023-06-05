@@ -3,6 +3,8 @@ const {
   VERIFICATION_BLOCK_CONFIRMATIONS,
 } = require("../helper-hardhat-config");
 
+const { verify } = require("../utils/verify");
+
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
@@ -21,6 +23,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log: true,
     waitConfirmations: VERIFICATION_BLOCK_CONFIRMATIONS,
   });
+
+  await verify(airdrop.address, arguments);
 };
 
 module.exports.tags = ["all", "airdrop"];
