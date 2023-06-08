@@ -2,20 +2,21 @@ const {
   networkConfig,
   VERIFICATION_BLOCK_CONFIRMATIONS,
 } = require("../helper-hardhat-config");
+const { network, ethers } = require("hardhat");
 
 const { verify } = require("../utils/verify");
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
-  const chainId = 11155111;
+  const chainId = network.config.chainId;
 
   log("----------------------------------------------------");
   const arguments = [
-    "0x8103b0a8a00be2ddc778e6e7eaa21791cd364625",
-    "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
-    "2505",
-    "2500000",
+    networkConfig[chainId]["vrfCoordinatorV2"],
+    networkConfig[chainId]["gasLane"],
+    networkConfig[chainId]["subscriptionId"],
+    networkConfig[chainId]["callbackGasLimit"],
   ];
   const airdrop = await deploy("Airdrop", {
     from: deployer,
@@ -25,6 +26,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
 
   await verify(airdrop.address, arguments);
+  console.log("contract address: ", airdrop.address);
 };
 
 module.exports.tags = ["all", "airdrop"];

@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const API_KEY_ETHERSCAN = process.env.API_KEY_ETHERSCAN;
 module.exports = {
   solidity: {
     compilers: [
@@ -33,7 +34,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      sepolia: "5DDYRKH9WW2CASRHPBR2RZ29467S31V18D",
+      sepolia: API_KEY_ETHERSCAN,
     },
   },
 };
